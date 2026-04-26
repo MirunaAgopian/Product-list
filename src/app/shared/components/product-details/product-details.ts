@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-details',
@@ -7,6 +8,18 @@ import { Component } from '@angular/core';
   styleUrl: './product-details.scss',
 })
 export class ProductDetails {
+  //in this way I get to insert the product name in the URL
+  private route = inject(ActivatedRoute);
+  ngOnInit(){
+    let currentName = this.route.snapshot.paramMap.get("name");
+    if(currentName){
+      this.detail.name = currentName;
+    }
+  }
+  //in this way I get to insert the product name in the URL
+
+  //this list should be an array of objects - and I should also
+  //change the access method inside product-details.html
   detail = {
       name: 'Gaming Maus',
       description:
