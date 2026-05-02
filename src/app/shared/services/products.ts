@@ -14,6 +14,10 @@ export class Products {
     price: 0
   });
 
+  addProduct(product:Product){
+    this.productList.update(list => [...list, product]);
+  }
+
   setProductDetailsByName(name:string) {
     let temporaryProduct = this.productList().find(product => product.name === name);
     if(temporaryProduct) this.productDetail.set(temporaryProduct);
