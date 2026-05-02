@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Products } from '../../services/products';
 
 @Component({
   selector: 'app-product-details',
@@ -10,24 +11,24 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductDetails {
   //in this way I get to insert the product name in the URL
   private route = inject(ActivatedRoute);
+  productService = inject(Products);
+  
+  //this is the default case if I don't have any data in JSON
+  detail = {
+      name: 'not available',
+      description: 'not available',
+      specs: 'not available',
+      stock: 0,
+      price: 0,
+    }
+
   ngOnInit(){
     let currentName = this.route.snapshot.paramMap.get("name");
     if(currentName){
-      this.detail.name = currentName;
+      this.productService.setProductDetailsByName(currentName);
     }
+     this.detail = this.productService.productDetail;
   }
-  //in this way I get to insert the product name in the URL
-
-  //this list should be an array of objects - and I should also
-  //change the access method inside product-details.html
-  detail = {
-      name: 'Gaming Maus',
-      description:
-        'Eine ergonomische Gaming-Maus mit hoher Präzision und einstellbarer DPI. Ideal für FPS- und MOBA-Spiele, bietet sie eine langlebige Bauweise und komfortable Seitentasten für schnelles Reagieren.',
-      specs: 'dpi: 6400, cable length: 1.8m, color: Schwarz',
-      stock: 120,
-      price: 25.99,
-    }
 
     deleteDetail(){
       this.detail.name = "";
