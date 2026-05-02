@@ -12,25 +12,16 @@ export class ProductDetails {
   //in this way I get to insert the product name in the URL
   private route = inject(ActivatedRoute);
   productService = inject(Products);
-  
-  //this is the default case if I don't have any data in JSON
-  detail = {
-      name: 'not available',
-      description: 'not available',
-      specs: 'not available',
-      stock: 0,
-      price: 0,
-    }
+  detail = this.productService.productDetail;
 
   ngOnInit(){
     let currentName = this.route.snapshot.paramMap.get("name");
     if(currentName){
       this.productService.setProductDetailsByName(currentName);
     }
-     this.detail = this.productService.productDetail;
   }
 
     deleteDetail(){
-      this.detail.name = "";
+      // this.detail.name = "";
     }
 }
