@@ -3,7 +3,8 @@ import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angula
 import { validate } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { Products } from '../../services/products';
-import { Product } from '../../interfaces/product';
+import { ProductModel } from '../../models/product-model';
+
 
 @Component({
   selector: 'app-product-form',
@@ -13,30 +14,20 @@ import { Product } from '../../interfaces/product';
 })
 export class ProductForm {
   router = inject(Router);
+
   productService = inject(Products);
 
   productForm = new FormGroup({
-    name: new FormControl('not available', {
-      validators: [Validators.required, Validators.minLength(3)],
-    }),
-    description: new FormControl('not available', { validators: [Validators.required] }),
-    stock: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
-    price: new FormControl(0, { validators: [Validators.required, Validators.min(0)] }),
+    name: new FormControl('not available', {nonNullable:true, validators: [Validators.required, Validators.minLength(3)]}),
+    description: new FormControl('not available', { nonNullable:true, validators: [Validators.required] }),
+    stock: new FormControl(0, {nonNullable:true, validators: [Validators.required, Validators.min(0)] }),
+    price: new FormControl(0, {nonNullable:true, validators: [Validators.required, Validators.min(0)] }),
   });
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
     if (this.productForm.valid) {
-      console.log(this.productForm.value);
-
-      let product: Product = {
-        "name": this.productForm.value.name?this.productForm.value.name : "n/a",
-        "description": this.productForm.value.description?this.productForm.value.description : "n/a",
-        "specs": 'not available',
-        "stock":this.productForm.value.stock?this.productForm.value.stock : 0,
-        "price": this.productForm.value.price?this.productForm.value.price : 0.0,
-      };
-
+      let product = new ProductModel(this.productForm.value);
       this.productService.addProduct(product);
       this.router.navigate(['']);
     }
