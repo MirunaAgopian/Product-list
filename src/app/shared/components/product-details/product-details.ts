@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Products } from '../../services/products';
 
 @Component({
@@ -11,17 +11,23 @@ import { Products } from '../../services/products';
 export class ProductDetails {
   //in this way I get to insert the product name in the URL
   private route = inject(ActivatedRoute);
+  router = inject(Router);
   productService = inject(Products);
   detail = this.productService.productDetail;
 
-  ngOnInit(){
-    let currentName = this.route.snapshot.paramMap.get("name");
-    if(currentName){
-      this.productService.setProductDetailsByName(currentName);
+  ngOnInit() {
+    let currentId = Number(this.route.snapshot.paramMap.get('id'));
+    if (currentId) {
+      this.productService.setProductDetailsById(currentId);
     }
   }
 
-    deleteDetail(){
-      // this.detail.name = "";
+  async deleteDetail() {
+    const id = this.detail().id;
+    if (id !== undefined) {
+      this.productService.deleteProduct(id);
+      this.router.navigate(['']);
     }
+    this.router.navigate(['']);
+  }
 }
